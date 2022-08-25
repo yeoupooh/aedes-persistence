@@ -184,20 +184,20 @@ class MemoryPersistence {
     cb(null, client)
   }
 
-  #outgoingEnqueuePerSub (sub, packet) {
+  outgoingEnqueuePerSub (sub, packet) {
     const id = sub.clientId
     const queue = getMapRef(this.#outgoing, id, [], CREATE_ON_EMPTY)
     queue[queue.length] = new Packet(packet)
   }
 
   outgoingEnqueue (sub, packet, cb) {
-    this.#outgoingEnqueuePerSub(sub, packet)
+    this.outgoingEnqueuePerSub(sub, packet)
     process.nextTick(cb)
   }
 
   outgoingEnqueueCombi (subs, packet, cb) {
     for (let i = 0; i < subs.length; i++) {
-      this.#outgoingEnqueuePerSub(subs[i], packet)
+      this.outgoingEnqueuePerSub(subs[i], packet)
     }
     process.nextTick(cb)
   }
